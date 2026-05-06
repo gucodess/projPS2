@@ -1,7 +1,8 @@
 package projps2;
 import lombok.*;
 import jakarta.persistence.*;
-import org.springframework.stereotype.Indexed;
+import jakarta.validation.constraints.*;
+// import org.springframework.stereotype.Indexed;
 import java.time.*;
 
 @Getter
@@ -13,11 +14,29 @@ import java.time.*;
 public class Estudante {
     @Id @GeneratedValue
     private long id;
+
+    @NotBlank(message = "Este campo é obrigatório") 
+    @Column(nullable = false, length = 150)
     private String nome;
+
+    @NotBlank(message = "Este campo é obrigatório") 
+    @Email(message = "Insira um formato válido de e-mail")
+    @Column(nullable = false, unique = true)
     private String email;
+    
+    @NotBlank(message = "Este campo é obrigatório") 
     private LocalDate dataNascimento;
+    
+    @NotBlank(message = "Este campo é obrigatório") 
     private long idCurso;
+    
+    @NotBlank(message = "Este campo é obrigatório") 
+    @Column(nullable = false, length = 150)
     private String faculdade;
+    
+    @NotBlank(message = "Este campo é obrigatório") 
     private Integer anoIngrasso;
+    
+    @NotBlank(message = "Este campo é obrigatório") 
     private Integer anoFormatura;
 }

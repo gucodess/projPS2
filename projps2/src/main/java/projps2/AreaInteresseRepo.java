@@ -1,4 +1,4 @@
-package com.atividade.projs2;
+package projps2;
 
 import org.springframework.data.repository.CrudRepository;
 

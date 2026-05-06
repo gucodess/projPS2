@@ -1,7 +1,7 @@
 package projps2;
 import lombok.*;
 import jakarta.persistence.*;
-import org.springframework.stereotype.Indexed;
+// import org.springframework.stereotype.Indexed;
 import java.time.*;
 
 @Getter @Setter
