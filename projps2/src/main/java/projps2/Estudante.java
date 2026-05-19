@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 // import org.springframework.stereotype.Indexed;
 import java.time.*;
+import java.util.*;
 
 @Getter
 @Setter
@@ -24,19 +25,23 @@ public class Estudante {
     @Column(nullable = false, unique = true)
     private String email;
     
-    @NotBlank(message = "Este campo é obrigatório") 
+    @NotNull(message = "Este campo é obrigatório") 
     private LocalDate dataNascimento;
     
-    @NotBlank(message = "Este campo é obrigatório") 
+    @NotNull(message = "Este campo é obrigatório") 
     private long idCurso;
     
     @NotBlank(message = "Este campo é obrigatório") 
     @Column(nullable = false, length = 150)
     private String faculdade;
     
-    @NotBlank(message = "Este campo é obrigatório") 
+    @NotNull(message = "Este campo é obrigatório") 
     private Integer anoIngrasso;
     
-    @NotBlank(message = "Este campo é obrigatório") 
+    @NotNull(message = "Este campo é obrigatório") 
     private Integer anoFormatura;
+
+    @ManyToMany(mappedBy = "estudantes")
+    private List<AreaInteresse> areasInteresse = new ArrayList<>();
+
 }
