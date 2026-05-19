@@ -1,8 +1,11 @@
 package projps2;
 import lombok.*;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
 // import org.springframework.stereotype.Indexed;
 import java.time.*;
+import java.util.*;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -12,9 +15,19 @@ import java.time.*;
 public class Vaga {
     @Id @GeneratedValue
     private long id;
+
+    @NotBlank(message = "Este campo é obrigatório!")
+    @Column(nullable = false, length = 150)
     private String titulo;
+
+    @NotBlank(message = "Este campo é obrigatório")
+    @Column(nullable = false, length = 2000)
     private String descricao;
+
+    @NotNull(message = "Este campo é obrigatório")
     private LocalDate dataPublicacao;
+
+    @NotBlank(message = "Este campo é obrigatório")
     private long idEmpresa;
 
     public enum status{
@@ -23,4 +36,10 @@ public class Vaga {
         EM_PROCESSO,
         CANCELADA
     }
+
+    @ManyToMany(mappedBy = "vagas")
+    private List<AreaInteresse> areasInteresse = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "vagas")
+    private List<Curso> cursos = new ArrayList<>();
 }

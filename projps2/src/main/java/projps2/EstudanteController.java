@@ -12,7 +12,19 @@ class EstudanteController{
     public EstudanteController(){}
 
     @GetMapping("/api/estudantes")
-    Iterable<Estudante> getEstudante() {return estudanteRepo.findAll(); }
+    Iterable<Estudante> getEstudante(@RequestParam(required = false) Long idCurso, @RequestParam(required = false) Integer anoIngresso, @RequestParam(required = false) Integer anoFormatura, @RequestParam(required = false) String nome) {
+        if(idCurso != null){
+            return estudanteRepo.findByIdCurso(idCurso);
+        }else if(anoIngresso != null){
+            return estudanteRepo.findByAnoIngresso(anoIngresso);
+        }else if(anoFormatura != null){
+            return estudanteRepo.findbyAnoFormatura(anoFormatura);
+        }else if(nome != null){
+            return estudanteRepo.findByNomeContainingIgnoreCase(nome);
+        }else{
+            return estudanteRepo.findAll();
+        }
+     }
 
     @GetMapping("/api/estudantes/{id}")
     Optional<Estudante> getEstudante(@PathVariable long id) {return estudanteRepo.findById(id); }
