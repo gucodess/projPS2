@@ -9,6 +9,8 @@ import org.springframework.web.server.*;
 class EstudanteController{
     @Autowired
     private EstudanteRepo estudanteRepo;
+    @Autowired
+    private CursoRepo cursoRepo;
     public EstudanteController(){}
 
     @GetMapping("/api/estudantes")
@@ -18,7 +20,7 @@ class EstudanteController{
         }else if(anoIngresso != null){
             return estudanteRepo.findByAnoIngresso(anoIngresso);
         }else if(anoFormatura != null){
-            return estudanteRepo.findbyAnoFormatura(anoFormatura);
+            return estudanteRepo.findByAnoFormatura(anoFormatura);
         }else if(nome != null){
             return estudanteRepo.findByNomeContainingIgnoreCase(nome);
         }else{
@@ -30,14 +32,54 @@ class EstudanteController{
     Optional<Estudante> getEstudante(@PathVariable long id) {return estudanteRepo.findById(id); }
 
     @PostMapping("/api/estudantes")
-    Estudante createEstudante(@RequestBody Estudante e) {return estudanteRepo.save(e); }
+    Estudante createEstudante(@RequestBody Estudante e) {
+        if (estudanteRepo.existsByEmail(e.getEmail())) {
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Já existe um estudante cadastrado com este e-mail."
+            );
+        }
+
+        if (!cursoRepo.existsById(e.getIdCurso())) {
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Não é permitido cadastrar estudante com idCurso inexistente."
+            );
+        }
+
+        if (e.getAnoFormatura() < e.getAnoIngresso()) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "O ano de formatura deve ser maior ou igual ao ano de ingresso."
+            );
+        }
+
+        return estudanteRepo.save(e);
+    }
 
     @PutMapping("/api/estudantes/{id}")
     Optional<Estudante> updateEstudante(@RequestBody Estudante estudante, @PathVariable long id) {
         Optional<Estudante> opt = this.getEstudante(id);
+
         if(opt.isPresent() && opt.get().getId() == estudante.getId()){
+
+            if (!cursoRepo.existsById(estudante.getIdCurso())) {
+                throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Não é permitido atualizar estudante com idCurso inexistente."
+                );
+            }
+
+            if (estudante.getAnoFormatura() < estudante.getAnoIngresso()) {
+                throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "O ano de formatura deve ser maior ou igual ao ano de ingresso."
+                );
+            }
+
             return Optional.of(estudanteRepo.save(estudante));
         }
+
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Erro ao alterar dados do estudante com id " + id);
     }
 
