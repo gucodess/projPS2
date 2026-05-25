@@ -1,9 +1,12 @@
-package projps2;
+package projps2.Controllers;
 import java.util.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.*;
+
+import projps2.Entidades.Empresa;
+import projps2.Repositorios.EmpresaRepo;
 
 @RestController
 public class EmpresaController {

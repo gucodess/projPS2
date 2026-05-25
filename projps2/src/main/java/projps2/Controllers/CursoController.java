@@ -1,10 +1,13 @@
-package projps2;
+package projps2.Controllers;
 
 import java.util.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.*;
+
+import projps2.Entidades.Curso;
+import projps2.Repositorios.CursoRepo;
 
 @RestController
 public class CursoController {

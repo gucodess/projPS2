@@ -1,6 +1,9 @@
-package projps2;
+package projps2.Repositorios;
 
 import org.springframework.data.repository.CrudRepository;
+
+import projps2.Entidades.Estudante;
+
 import java.util.List;
 
 public interface EstudanteRepo extends CrudRepository<Estudante, Long> {

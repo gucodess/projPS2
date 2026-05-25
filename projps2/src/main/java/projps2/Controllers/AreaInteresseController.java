@@ -1,9 +1,12 @@
-package projps2;
+package projps2.Controllers;
 import java.util.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.*;
+
+import projps2.Entidades.AreaInteresse;
+import projps2.Repositorios.AreaInteresseRepo;
 
 @RestController
 public class AreaInteresseController {

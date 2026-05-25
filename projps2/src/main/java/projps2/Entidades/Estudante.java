@@ -1,4 +1,4 @@
-package projps2;
+package projps2.Entidades;
 import lombok.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -36,7 +36,7 @@ public class Estudante {
     private String faculdade;
     
     @NotNull(message = "Este campo é obrigatório") 
-    private Integer anoIngrasso;
+    private Integer anoIngresso;
     
     @NotNull(message = "Este campo é obrigatório") 
     private Integer anoFormatura;
