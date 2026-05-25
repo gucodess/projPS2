@@ -1,4 +1,4 @@
-package projps2;
+package projps2.Entidades;
 import lombok.*;
 import jakarta.persistence.*;
 // import org.springframework.stereotype.Indexed;

@@ -1,9 +1,17 @@
-package projps2;
+package projps2.Controllers;
 import java.util.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.*;
+
+import jakarta.transaction.Transactional;
+import projps2.Entidades.AreaInteresse;
+import projps2.Entidades.Estudante;
+import projps2.Repositorios.CursoRepo;
+import projps2.Repositorios.EstudanteRepo;
+import projps2.DTOs.AreaInteresseResponseDTO;
+import projps2.DTOs.EstudanteResponseDTO;
 
 @RestController
 class EstudanteController{
@@ -31,6 +39,14 @@ class EstudanteController{
     @GetMapping("/api/estudantes/{id}")
     Optional<Estudante> getEstudante(@PathVariable long id) {return estudanteRepo.findById(id); }
 
+    // ESTUDANTE E ÁREA DE INTERESSE
+     /*
+     @GetMapping("/api/estudantes/{idEstudante}/areas-interesse")
+     @Transactional(readOnly = true)
+     public ResponseEntity<List<EstudanteResponseDTO>> getEstudantesPorAreaInteresse(@PathVariable long areaInteresseId){
+        AreaInteresse areaInteresse = findAreaInteresse(areaInteresseId);
+     }
+    */
     @PostMapping("/api/estudantes")
     Estudante createEstudante(@RequestBody Estudante e) {
         if (estudanteRepo.existsByEmail(e.getEmail())) {
