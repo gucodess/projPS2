@@ -8,11 +8,16 @@ import org.springframework.web.server.*;
 
 import projps2.Entidades.Curso;
 import projps2.Repositorios.CursoRepo;
+import projps2.Repositorios.EstudanteRepo;
 
 @RestController
 public class CursoController {
     @Autowired
     private CursoRepo cursoRepo;
+
+    @Autowired
+    private EstudanteRepo estudanteRepo;
+
     public CursoController(){}
 
     @GetMapping("/api/cursos")
@@ -22,7 +27,16 @@ public class CursoController {
     Optional<Curso> getCurso(@PathVariable long id) {return cursoRepo.findById(id); }
 
     @PostMapping("/api/cursos")
-    Curso createCurso(@RequestBody Curso c) {return cursoRepo.save(c); }
+    Curso createCurso(@RequestBody Curso c) {
+        if (cursoRepo.existsByNome(c.getNome())) {
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Já existe um curso cadastrado com este nome."
+            );
+        }
+
+        return cursoRepo.save(c);
+    }
 
     @PutMapping("/api/cursos/{id}")
     Optional<Curso> updateCurso(@RequestBody Curso curso, @PathVariable long id) {
@@ -34,5 +48,14 @@ public class CursoController {
     }
 
     @DeleteMapping(value = "/api/cursos/{id}")
-    void deleteCurso(@PathVariable long id) {cursoRepo.deleteById(id);}
+    void deleteCurso(@PathVariable long id) {
+        if (!estudanteRepo.findByIdCurso(id).isEmpty()) {
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Não é permitido excluir curso vinculado a estudantes."
+            );
+        }
+
+        cursoRepo.deleteById(id);
+    }
 }

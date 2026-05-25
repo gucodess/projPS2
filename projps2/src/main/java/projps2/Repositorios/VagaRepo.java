@@ -8,6 +8,7 @@ import projps2.Entidades.Vaga;
 public interface VagaRepo extends CrudRepository<Vaga, Long> {
     List<Vaga> findByIdEmpresa(Long idEmpresa);
     List<Vaga> findByTitulo(String titulo);
+    boolean existsByIdEmpresa(Long idEmpresa);
 }
 
 

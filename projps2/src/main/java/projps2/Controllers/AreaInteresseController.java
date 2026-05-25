@@ -21,7 +21,16 @@ public class AreaInteresseController {
     Optional<AreaInteresse> getAreaInteresse(@PathVariable long id) {return areaInteresseRepo.findById(id); }
 
     @PostMapping("/api/areas-interesse")
-    AreaInteresse createAreaInteresse(@RequestBody AreaInteresse a) {return areaInteresseRepo.save(a); }
+    AreaInteresse createAreaInteresse(@RequestBody AreaInteresse a) {
+        if (areaInteresseRepo.existsByNome(a.getNome())) {
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Já existe uma área de interesse cadastrada com este nome."
+            );
+        }
+
+        return areaInteresseRepo.save(a);
+    }
 
     @PutMapping("/api/areas-interesse/{id}")
     Optional<AreaInteresse> updateAreaInteresse(@RequestBody AreaInteresse areaInteresse, @PathVariable long id) {

@@ -7,11 +7,16 @@ import org.springframework.web.server.*;
 
 import projps2.Entidades.Empresa;
 import projps2.Repositorios.EmpresaRepo;
+import projps2.Repositorios.VagaRepo;
 
 @RestController
 public class EmpresaController {
     @Autowired
     private EmpresaRepo empresaRepo;
+
+    @Autowired
+    private VagaRepo vagaRepo;
+
     public EmpresaController(){}
 
     @GetMapping("/api/empresas")
@@ -21,7 +26,16 @@ public class EmpresaController {
     Optional<Empresa> getEmpresa(@PathVariable long id) {return empresaRepo.findById(id); }
 
     @PostMapping("/api/empresas")
-    Empresa createEmpresa(@RequestBody Empresa e) {return empresaRepo.save(e); }
+    Empresa createEmpresa(@RequestBody Empresa e) {
+        if (empresaRepo.existsByCnpj(e.getCnpj())) {
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Já existe uma empresa cadastrada com este CNPJ."
+            );
+        }
+
+        return empresaRepo.save(e);
+    }
 
     @PutMapping("/api/empresas/{id}")
     Optional<Empresa> updateEmpresa(@RequestBody Empresa empresa, @PathVariable long id) {
@@ -33,5 +47,14 @@ public class EmpresaController {
     }
 
     @DeleteMapping(value = "/api/empresas/{id}")
-    void deleteEmpresa(@PathVariable long id) {empresaRepo.deleteById(id);}
+    void deleteEmpresa(@PathVariable long id) {
+        if (vagaRepo.existsByIdEmpresa(id)) {
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Não é permitido excluir empresa vinculada a vagas."
+            );
+        }
+
+        empresaRepo.deleteById(id);
+}
 }

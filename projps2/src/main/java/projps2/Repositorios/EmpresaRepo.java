@@ -1,9 +1,8 @@
 package projps2.Repositorios;
-
+import projps2.Entidades.Empresa;
 import org.springframework.data.repository.CrudRepository;
 
-import projps2.Entidades.Empresa;
-
-public interface EmpresaRepo extends CrudRepository<Empresa, Long> {}
-
+public interface EmpresaRepo extends CrudRepository<Empresa, Long> {
+    boolean existsByCnpj(String cnpj);
+}
 
