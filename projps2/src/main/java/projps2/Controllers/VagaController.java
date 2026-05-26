@@ -127,7 +127,7 @@ public class VagaController {
 
     @PutMapping("/api/vagas/{idVaga}/cursos/{idCurso}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void associarCursoVaga(@PathVariable long idVaga, @PathVariable long idArea){
+    public void associarCursoVaga(@PathVariable long idVaga, @PathVariable long idCurso){
         Optional<Vaga> vagaOpt = vagaRepo.findById(idVaga);
         Optional<Curso> cursoOpt = cursoRepo.findById(idCurso);
 
@@ -155,7 +155,7 @@ public class VagaController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void desassociarAreaInteresseVaga(@PathVariable long idVaga, @PathVariable long idArea){
         Optional<Vaga> vagaOpt = vagaRepo.findById(idVaga);
-        Optional<AreaInteresse> areaOpt = AreaInteresseRepo.findById(idArea);
+        Optional<AreaInteresse> areaOpt = areaInteresseRepo.findById(idArea);
 
         if(vagaOpt.isEmpty() || areaOpt.isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vaga ou área de interesse não encontradas!");

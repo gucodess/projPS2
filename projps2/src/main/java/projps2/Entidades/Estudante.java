@@ -44,8 +44,8 @@ public class Estudante {
     @ManyToMany
     @JoinTable(
             name = "estudante_area_interesse",
-            joinColumns = @joinColumn(name = "estudante_id"),
-            inverseJoinColumns = @joinColumn(name = "area_interesse_id")
+            joinColumns = @JoinColumn(name = "estudante_id"),
+            inverseJoinColumns = @JoinColumn(name = "area_interesse_id")
         )
     private List<AreaInteresse> areasInteresse = new ArrayList<>();
 }
