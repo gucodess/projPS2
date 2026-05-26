@@ -3,6 +3,9 @@ import lombok.*;
 import jakarta.persistence.*;
 // import org.springframework.stereotype.Indexed;
 import jakarta.validation.constraints.NotBlank;
+import java.util.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Getter
 @Setter

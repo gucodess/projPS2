@@ -1,7 +1,9 @@
 package projps2.DTOs;
 
 import projps2.Entidades.Curso;
+import lombok.Getter;
 
+@Getter
 public class CursoResponseDTO {
     
     private long id;

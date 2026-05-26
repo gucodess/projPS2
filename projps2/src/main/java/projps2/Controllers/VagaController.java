@@ -47,7 +47,7 @@ public class VagaController {
 
     //GETMAPPING VAGA X AREA INTERESSE
 
-    @GetMapping("api/vagas/{idVaga}/areas-interesse")
+    @GetMapping("/api/vagas/{idVaga}/areas-interesse")
     public Iterable<AreaInteresse> getAreaInteresseVaga(@PathVariable long idVaga){
         Optional<Vaga> opt = vagaRepo.findById(idVaga);
         if(opt.isEmpty()){
@@ -59,7 +59,7 @@ public class VagaController {
 
     //GETMAPPING VAGA X CURSO
 
-    @GetMapping("api/vagas/{idVaga}/cursos")
+    @GetMapping("/api/vagas/{idVaga}/cursos")
     public Iterable<Curso> getCursoVaga(@PathVariable long idVaga){
         Optional<Vaga> opt = vagaRepo.findById(idVaga);
 
@@ -82,7 +82,7 @@ public class VagaController {
     }
 
     @PutMapping("/api/vagas/{id}")
-    Optional<Vaga> updateVaga(@RequestBody Vaga vaga, @PathVariable long id) {
+    Optional<Vaga> updateVaga(@RequestBody Vaga vaga, @PathVariable Long id) {
         Optional<Vaga> opt = this.getVaga(id);
 
         if(opt.isPresent() && opt.get().getId() == vaga.getId()){
@@ -102,7 +102,7 @@ public class VagaController {
 
     //PUTMAPPING DE VAGA X AREA INTERESSE
 
-    @PutMapping("api/vagas/{idVaga}/areas-interesse/{idArea}")
+    @PutMapping("/api/vagas/{idVaga}/areas-interesse/{idArea}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void associarAreaInteresseVaga(@PathVariable long idVaga, @PathVariable long idArea){
         Optional<Vaga> vagaOpt = vagaRepo.findById(idVaga);
@@ -127,7 +127,7 @@ public class VagaController {
 
     @PutMapping("/api/vagas/{idVaga}/cursos/{idCurso}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void associarCursoVaga(@PathVariable long idVaga, @PathVariable long idCurso){
+    public void associarCursoVaga(@PathVariable long idVaga, @PathVariable Long idCurso){
         Optional<Vaga> vagaOpt = vagaRepo.findById(idVaga);
         Optional<Curso> cursoOpt = cursoRepo.findById(idCurso);
 
@@ -151,9 +151,9 @@ public class VagaController {
 
     // DELETE MAPPING VAGA X ÁREA INTERESSE
 
-    @DeleteMapping("api/vagas/{idVaga}/areas-interesse/{idArea}")
+    @DeleteMapping("/api/vagas/{idVaga}/areas-interesse/{idArea}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void desassociarAreaInteresseVaga(@PathVariable long idVaga, @PathVariable long idArea){
+    public void desassociarAreaInteresseVaga(@PathVariable Long idVaga, @PathVariable Long idArea){
         Optional<Vaga> vagaOpt = vagaRepo.findById(idVaga);
         Optional<AreaInteresse> areaOpt = areaInteresseRepo.findById(idArea);
 
@@ -171,9 +171,9 @@ public class VagaController {
 
     // DELETE MAPPING VAGA X CURSO
 
-    @DeleteMapping("api/vagas/{idVaga}/curso/{idCurso}")
+    @DeleteMapping("/api/vagas/{idVaga}/cursos/{idCurso}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void desassociarCursoVaga(@PathVariable long idVaga, @PathVariable long idCurso){
+    public void desassociarCursoVaga(@PathVariable Long idVaga, @PathVariable Long idCurso){
         Optional<Vaga> vagaOpt = vagaRepo.findById(idVaga);
         Optional<Curso> cursoOpt = cursoRepo.findById(idCurso);
 

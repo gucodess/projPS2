@@ -9,6 +9,7 @@ import org.springframework.web.server.*;
 import projps2.Entidades.Curso;
 import projps2.Repositorios.CursoRepo;
 import projps2.Repositorios.EstudanteRepo;
+import projps2.Repositorios.VagaRepo;
 
 @RestController
 public class CursoController {

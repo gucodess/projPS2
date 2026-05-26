@@ -26,6 +26,7 @@ public class EmpresaController {
             Pageable pagina = PageRequest.of(page, size);
             return empresaRepo.findAll(pagina).getContent();
         }
+        
         return empresaRepo.findAll();
     }
                         

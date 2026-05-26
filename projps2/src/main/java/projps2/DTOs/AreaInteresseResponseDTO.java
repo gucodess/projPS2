@@ -1,7 +1,9 @@
 package projps2.DTOs;
 
 import projps2.Entidades.AreaInteresse;
+import lombok.Getter;
 
+@Getter
 public class AreaInteresseResponseDTO {
     
     private long id;

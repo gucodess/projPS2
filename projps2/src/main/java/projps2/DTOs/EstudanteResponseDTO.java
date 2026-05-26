@@ -2,8 +2,10 @@ package projps2.DTOs;
 
 import java.time.LocalDate;
 
+import lombok.Getter;
 import projps2.Entidades.Estudante;
 
+@Getter
 public class EstudanteResponseDTO {
     private long id;
     private String nome;

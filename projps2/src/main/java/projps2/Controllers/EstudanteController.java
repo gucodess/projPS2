@@ -4,14 +4,11 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.*;
-
-import jakarta.transaction.Transactional;
 import projps2.Entidades.AreaInteresse;
 import projps2.Entidades.Estudante;
 import projps2.Repositorios.CursoRepo;
 import projps2.Repositorios.EstudanteRepo;
-import projps2.DTOs.AreaInteresseResponseDTO;
-import projps2.DTOs.EstudanteResponseDTO;
+import projps2.Repositorios.AreaInteresseRepo;
 
 @RestController
 class EstudanteController{
@@ -108,7 +105,7 @@ class EstudanteController{
 
     // PUTMAPPING DA RELAÇÃO ESTUDANTE X ÁREA DE INTERESSE
 
-    @PutMapping("api/estudantes/{idEstudante}/areas-interesse/{idArea}")
+    @PutMapping("/api/estudantes/{idEstudante}/areas-interesse/{idArea}")
     @ResponseStatus(HttpStatus.NO_CONTENT) // HTTP 204
     public void associarAreaInteresseEstudante(@PathVariable long idEstudante, @PathVariable long idArea){
         Optional<Estudante> estudanteOpt = estudanteRepo.findById(idEstudante);
@@ -134,7 +131,7 @@ class EstudanteController{
 
     // DELETEMAPPING DA RELAÇÃO ESTUDANTE X ÁREA DE INTERESSE
 
-    @DeleteMapping("api/estudantes/{idEstudante}/areas-interesse/{idArea}")
+    @DeleteMapping("/api/estudantes/{idEstudante}/areas-interesse/{idArea}")
     @ResponseStatus(HttpStatus.NO_CONTENT) 
     public void desassociarAreaInteresseEstudante(@PathVariable long idEstudante, @PathVariable long idArea){
         Optional<Estudante> estudanteOpt = estudanteRepo.findById(idEstudante);

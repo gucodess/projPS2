@@ -1,9 +1,10 @@
 package projps2.DTOs;
 
 import java.time.LocalDate;
-
+import lombok.Getter;
 import projps2.Entidades.Vaga;
 
+@Getter
 public class VagaResponseDTO {
     private long id;
     private String titulo;
