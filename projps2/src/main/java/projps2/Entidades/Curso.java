@@ -17,4 +17,8 @@ public class Curso {
     @NotBlank(message = "Este campo é obrigatório") 
     @Column(nullable = false, unique = true, length = 120)
     public String nome;
+
+    @ManyToMany(mappedBy = "cursos")
+    @JsonIgnore
+    private List<Vaga> vagas = new ArrayList<>();
 }

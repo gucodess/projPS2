@@ -41,7 +41,11 @@ public class Estudante {
     @NotNull(message = "Este campo é obrigatório") 
     private Integer anoFormatura;
 
-    @ManyToMany(mappedBy = "estudantes")
+    @ManyToMany
+    @JoinTable(
+            name = "estudante_area_interesse",
+            joinColumns = @joinColumn(name = "estudante_id"),
+            inverseJoinColumns = @joinColumn(name = "area_interesse_id")
+        )
     private List<AreaInteresse> areasInteresse = new ArrayList<>();
-
 }

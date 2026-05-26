@@ -19,6 +19,9 @@ class EstudanteController{
     private EstudanteRepo estudanteRepo;
     @Autowired
     private CursoRepo cursoRepo;
+    @Autowired
+    private AreaInteresseRepo areaInteresseRepo;
+
     public EstudanteController(){}
 
     @GetMapping("/api/estudantes")
@@ -39,14 +42,18 @@ class EstudanteController{
     @GetMapping("/api/estudantes/{id}")
     Optional<Estudante> getEstudante(@PathVariable long id) {return estudanteRepo.findById(id); }
 
-    // ESTUDANTE E ÁREA DE INTERESSE
-     /*
-     @GetMapping("/api/estudantes/{idEstudante}/areas-interesse")
-     @Transactional(readOnly = true)
-     public ResponseEntity<List<EstudanteResponseDTO>> getEstudantesPorAreaInteresse(@PathVariable long areaInteresseId){
-        AreaInteresse areaInteresse = findAreaInteresse(areaInteresseId);
-     }
-    */
+    // GETMAPPING DA RELAÇÃO ESTUDANTE X ÁREA DE INTERESSE
+
+    @GetMapping("/api/estudantes/{idEstudante}/areas-interesse")
+    public Iterable<AreaInteresse> getAreaInteresseEstudante(@PathVariable long idEstudante){
+        Optional<Estudante> opt = estudanteRepo.findById(idEstudante);
+        if(opt.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Estudante não encontrado");
+        }
+        return opt.get().getAreasInteresse();
+    }
+
+
     @PostMapping("/api/estudantes")
     Estudante createEstudante(@RequestBody Estudante e) {
         if (estudanteRepo.existsByEmail(e.getEmail())) {
@@ -99,6 +106,48 @@ class EstudanteController{
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Erro ao alterar dados do estudante com id " + id);
     }
 
+    // PUTMAPPING DA RELAÇÃO ESTUDANTE X ÁREA DE INTERESSE
+
+    @PutMapping("api/estudantes/{idEstudante}/areas-interesse/{idArea}")
+    @ResponseStatus(HttpStatus.NO_CONTENT) // HTTP 204
+    public void associarAreaInteresseEstudante(@PathVariable long idEstudante, @PathVariable long idArea){
+        Optional<Estudante> estudanteOpt = estudanteRepo.findById(idEstudante);
+        Optional<AreaInteresse> areaOpt = areaInteresseRepo.findById(idArea);
+
+        if(estudanteOpt.isEmpty() || areaOpt.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Estudante ou área de interesse não encontrados");
+        }
+
+        Estudante estudante = estudanteOpt.get();
+        AreaInteresse area = areaOpt.get();
+
+        if(estudante.getAreasInteresse().contains(area)){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Esta associação já existe!");
+        }
+
+        estudante.getAreasInteresse().add(area);
+        estudanteRepo.save(estudante);
+    }
+
     @DeleteMapping(value = "/api/estudantes/{id}")
     void deleteEstudante(@PathVariable long id) {estudanteRepo.deleteById(id);}
+
+    // DELETEMAPPING DA RELAÇÃO ESTUDANTE X ÁREA DE INTERESSE
+
+    @DeleteMapping("api/estudantes/{idEstudante}/areas-interesse/{idArea}")
+    @ResponseStatus(HttpStatus.NO_CONTENT) 
+    public void desassociarAreaInteresseEstudante(@PathVariable long idEstudante, @PathVariable long idArea){
+        Optional<Estudante> estudanteOpt = estudanteRepo.findById(idEstudante);
+        Optional<AreaInteresse> areaOpt = areaInteresseRepo.findById(idArea);
+
+        if(estudanteOpt.isEmpty() || areaOpt.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Estudante ou área de interesse não encontrados");
+        } 
+
+        Estudante estudante = estudanteOpt.get();
+        AreaInteresse area = areaOpt.get();
+
+        estudante.getAreasInteresse().remove(area);
+        estudanteRepo.save(estudante);
+    }
 }

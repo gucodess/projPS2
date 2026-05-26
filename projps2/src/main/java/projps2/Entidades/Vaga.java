@@ -37,9 +37,21 @@ public class Vaga {
         CANCELADA
     }
 
-    @ManyToMany(mappedBy = "vagas")
+    // Localize os atributos de relacionamento e substitua por:
+
+    @ManyToMany
+    @JoinTable(
+        name = "vaga_area_interesse",
+        joinColumns = @JoinColumn(name = "vaga_id"),
+        inverseJoinColumns = @JoinColumn(name = "area_interesse_id")
+    )
     private List<AreaInteresse> areasInteresse = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "vagas")
+    @ManyToMany
+    @JoinTable(
+        name = "vaga_curso",
+        joinColumns = @JoinColumn(name = "vaga_id"),
+        inverseJoinColumns = @JoinColumn(name = "curso_id")
+    )
     private List<Curso> cursos = new ArrayList<>();
 }

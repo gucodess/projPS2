@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "areas-interesse")
+@Table(name = "areas_interesse")
 public class AreaInteresse {
     @Id
     @GeneratedValue
@@ -18,6 +18,14 @@ public class AreaInteresse {
     @NotBlank(message = "Este campo é obrigatório") 
     @Column(nullable = false, unique = true, length = 120)
     public String nome;
+
+    @ManyToMany(mappedBy = "areasInteresse")
+    @JsonIgnore
+    private List<Estudante> estudantes = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "areasInteresse")
+    @JsonIgnore
+    private List<Vaga> vagas = new ArrayList<>();
 
 }
 
