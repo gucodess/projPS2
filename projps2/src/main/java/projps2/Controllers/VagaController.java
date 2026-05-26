@@ -30,7 +30,7 @@ public class VagaController {
     public VagaController(){}
 
     @GetMapping("/api/vagas")
-    Iterable<Vaga> getVaga(@RequestParam(required = false) Long idEmpresa, @RequestParam(required = false) String titulo, @RequestParam(required = false) Vaga.status status) {
+    Iterable<Vaga> getVaga(@RequestParam(required = false) Long idEmpresa, @RequestParam(required = false) String titulo, @RequestParam(required = false) Vaga.Status status) {
         if(idEmpresa != null){
             return vagaRepo.findByIdEmpresa(idEmpresa);
         }else if(titulo != null){

@@ -27,15 +27,19 @@ public class Vaga {
     @NotNull(message = "Este campo é obrigatório")
     private LocalDate dataPublicacao;
 
-    @NotBlank(message = "Este campo é obrigatório")
+    @NotNull(message = "Este campo é obrigatório")
     private long idEmpresa;
 
-    public enum status{
+    public enum Status{
         ABERTA, 
         FECHADA,
         EM_PROCESSO,
         CANCELADA
     }
+
+    @NotNull(message = "Este campo é obrigatório")
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     // Localize os atributos de relacionamento e substitua por:
 
