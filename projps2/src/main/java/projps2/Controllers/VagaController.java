@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.*;
 
 import projps2.Entidades.AreaInteresse;
+import projps2.Entidades.Curso;
 import projps2.Entidades.Vaga;
 import projps2.Repositorios.AreaInteresseRepo;
 import projps2.Repositorios.CursoRepo;
@@ -29,11 +30,13 @@ public class VagaController {
     public VagaController(){}
 
     @GetMapping("/api/vagas")
-    Iterable<Vaga> getVaga(@RequestParam(required = false) Long idEmpresa, @RequestParam(required = false) String titulo) {
+    Iterable<Vaga> getVaga(@RequestParam(required = false) Long idEmpresa, @RequestParam(required = false) String titulo, @RequestParam(required = false) Vaga.status status) {
         if(idEmpresa != null){
             return vagaRepo.findByIdEmpresa(idEmpresa);
         }else if(titulo != null){
             return vagaRepo.findByTitulo(titulo);
+        }else if(status != null){
+            return vagaRepo.findByStatus(status);
         }else{
             return vagaRepo.findAll();
         }
@@ -125,9 +128,63 @@ public class VagaController {
     @PutMapping("/api/vagas/{idVaga}/cursos/{idCurso}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void associarCursoVaga(@PathVariable long idVaga, @PathVariable long idArea){
-        
+        Optional<Vaga> vagaOpt = vagaRepo.findById(idVaga);
+        Optional<Curso> cursoOpt = cursoRepo.findById(idCurso);
+
+        if(vagaOpt.isEmpty() || cursoOpt.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vaga ou curso não encontrados");
+        }
+
+        Vaga vaga = vagaOpt.get();
+        Curso curso = cursoOpt.get();
+
+        if(vaga.getCursos().contains(curso)){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Associação já existente!");
+        }
+
+        vaga.getCursos().add(curso);
+        vagaRepo.save(vaga);
     }
 
     @DeleteMapping(value = "/api/vagas/{id}")
     void deleteVaga(@PathVariable long id) {vagaRepo.deleteById(id);}
+
+    // DELETE MAPPING VAGA X ÁREA INTERESSE
+
+    @DeleteMapping("api/vagas/{idVaga}/areas-interesse/{idArea}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void desassociarAreaInteresseVaga(@PathVariable long idVaga, @PathVariable long idArea){
+        Optional<Vaga> vagaOpt = vagaRepo.findById(idVaga);
+        Optional<AreaInteresse> areaOpt = AreaInteresseRepo.findById(idArea);
+
+        if(vagaOpt.isEmpty() || areaOpt.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vaga ou área de interesse não encontradas!");
+        }
+
+        Vaga vaga = vagaOpt.get();
+        AreaInteresse area = areaOpt.get();
+
+        vaga.getAreasInteresse().remove(area);
+        vagaRepo.save(vaga);
+
+    }
+
+    // DELETE MAPPING VAGA X CURSO
+
+    @DeleteMapping("api/vagas/{idVaga}/curso/{idCurso}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void desassociarCursoVaga(@PathVariable long idVaga, @PathVariable long idCurso){
+        Optional<Vaga> vagaOpt = vagaRepo.findById(idVaga);
+        Optional<Curso> cursoOpt = cursoRepo.findById(idCurso);
+
+        if(vagaOpt.isEmpty() || cursoOpt.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vaga ou curso não encontrados!");
+        }
+
+        Vaga vaga = vagaOpt.get();
+        Curso curso = cursoOpt.get();
+
+        vaga.getCursos().remove(curso);
+        vagaRepo.save(vaga);
+    }
 }

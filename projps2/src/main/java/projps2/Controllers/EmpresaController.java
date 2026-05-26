@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.*;
-
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import projps2.Entidades.Empresa;
 import projps2.Repositorios.EmpresaRepo;
 import projps2.Repositorios.VagaRepo;
@@ -20,7 +21,14 @@ public class EmpresaController {
     public EmpresaController(){}
 
     @GetMapping("/api/empresas")
-    Iterable<Empresa> getEmpresa() {return empresaRepo.findAll(); }
+    Iterable<Empresa> getEmpresa(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size){
+        if(page != null && size != null){
+            Pageable pagina = PageRequest.of(page, size);
+            return empresaRepo.findAll(pagina).getContent();
+        }
+        return empresaRepo.findAll;
+    }
+                        
 
     @GetMapping("/api/empresas/{id}")
     Optional<Empresa> getEmpresa(@PathVariable long id) {return empresaRepo.findById(id); }

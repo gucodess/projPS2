@@ -18,6 +18,9 @@ public class CursoController {
     @Autowired
     private EstudanteRepo estudanteRepo;
 
+    @Autowired
+    private VagaRepo vagaRepo;
+
     public CursoController(){}
 
     @GetMapping("/api/cursos")
@@ -54,6 +57,10 @@ public class CursoController {
                 HttpStatus.CONFLICT,
                 "Não é permitido excluir curso vinculado a estudantes."
             );
+        }
+
+        if(!vagaRepo.findByCursosId(id).isEmpty()){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Não é permitido excluir curso vínculado a vagas!");
         }
 
         cursoRepo.deleteById(id);
